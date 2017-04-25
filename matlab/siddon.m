@@ -76,8 +76,32 @@ endif
 
 
 if (p1y < p2y) 
-
+  
+  if (alpha_min == alpha_ymin)
+    j_min = 1;
+  else 
+    j_min = ceil((p1y + alpha_min *  (p2y - p1y) - Y0)/d);
+  endif
+  
+  if (alpha_max == alpha_ymax) 
+    j_max = Ny - 1;
+  else
+    j_max = floor((p1y + alpha_max * (p2y - p1y) - Y0)/d);
+  endif
+  
 elseif (p1y > p2y) 
+
+  if (alpha_min == alpha_ymin)
+    j_max = Ny - 2;
+  else 
+    j_max = floor((p1y + alpha_min * (p2y - p1y) - Y0)/d);
+  endif
+  
+  if (alpha_max == alpha_ymax) 
+    j_min = 0;
+  else
+    j_min = ceil((p1y + alpha_max * (p2y - p1y) - Y0)/d);
+  endif
  
 else 
   disp('Special case: p1y and p2y are the same');
