@@ -1,11 +1,11 @@
 drawTheGrid = true;
 
 % the points
-p1x = -3;
-p1y = 0;
+p1x = -1.5;
+p1y = 0.1;
 
-p2x = 3;
-p2y = 3;
+p2x = 1.5;
+p2y = 0.11;
 
 p1 = [p1x p1y];
 p2 = [p2x p2y];
@@ -160,7 +160,7 @@ i = floor( (p1x + alphatmp * (p2x - p1x) - X0)/d );
 j = floor( (p1y + alphatmp * (p2y - p1y) - Y0)/d );
 
 
-alphaxu = abs(X0 / (p2x - p1x));
+alphaxu = abs(d / (p2x - p1x));
 if (p1x < p2x) 
   iu = 1;
 elseif (p1x > p2x)
@@ -169,7 +169,7 @@ elseif (p1x == p2x)
   disp('Special case!');
 end
 
-alphayu = abs(Y0 / (p2y - p1y));
+alphayu = abs(d / (p2y - p1y));
 if (p1y < p2y) 
   ju = 1;
 elseif (p1y > p2y) 
@@ -187,25 +187,32 @@ dconv = sqrt( (p2x - p1x)^2 + (p2y - p1y)^2 );
 d12 = 0;
 alphac = alpha_min;
 
-disp(['Indicies: ', num2str(i),' ', num2str(j)]);
+%disp(['Indicies: ', num2str(i),' ', num2str(j)]);
 for k = 1:Nv
   if (alphax <= alphay) 
     l = (alphax - alphac) * dconv;
+    disp(['Indicies (i): ', num2str(i),' ', num2str(j), ' ', num2str(l)]);
+
     d12 = d12 + l;
     i = i + iu;
     alphac = alphax;
     alphax = alphax + alphaxu;
   elseif (alphax > alphay) 
     l = (alphay - alphac) * dconv;
+    disp(['Indicies (j): ', num2str(i),' ', num2str(j), ' ', num2str(l)]);
+
+    
     d12 = d12 + l;
     j = j + ju;
     alphac = alphay;
     alphay = alphay + alphayu;
+  elseif (alphax == alphay) 
+    disp(['Indicies (=): ', num2str(i), ' ' , num2str(j)]);
+    alphax = alphax + alphaxu; 
   end
-  disp(['Indicies: ', num2str(i),' ', num2str(j), ' ', num2str(l)]);
 end
 
-disp(['Distance: ', num2str(d12)]);
+%disp(['Distance: ', num2str(d12)]);
 
 
 
