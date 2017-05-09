@@ -1,11 +1,11 @@
 drawTheGrid = true;
 
 % the points
-p1x = -3.3;
+p1x = -3.5;
 p1y = 0.1;
 
 p2x = 4.5;
-p2y = 4.5;
+p2y = 0.11;
 
 p1 = [p1x p1y];
 p2 = [p2x p2y];
@@ -175,10 +175,6 @@ alphatmp = (min(alphax, alphay) + alpha_min)/2;
 i = floor( (p1x + alphatmp * (p2x - p1x) - X0)/d );
 j = floor( (p1y + alphatmp * (p2y - p1y) - Y0)/d );
 
-% temporary fix since the above won't get the right one if we're in teh
-% pixel space
-i = round( (p1x + alphax * (p2x - p1x) - X0)/d) - 1;
-j = round( (p1y + alphay * (p2y - p1y) - X0)/d) - 1;
 
 alphaxu = abs(d / (p2x - p1x));
 if (p1x < p2x) 
@@ -242,11 +238,10 @@ if (i_min > 1 || j_min > 1)
 end
 
 %alphac = alphax;
-%alphax = alphax + alphaxu;
+alphax = alphax + alphaxu;
 
-% 1+1 because i've delt with the first plane already above (when it starts
-% insdie pixel)
-for k = 1+1:Np
+%disp(['Indicies: ', num2str(i),' ', num2str(j)]);
+for k = 1:Np
   if (alphax <= alphay) 
     l = (alphax - alphac) * dconv;
     disp(['Indicies (i): ', num2str(i),' ', num2str(j), ' ', num2str(l)]);
@@ -270,33 +265,7 @@ for k = 1+1:Np
   end
 end
 
-if (i_max < Nx - 1 || j_max < Ny - 1) 
-    alphax = 1;
-    
-%else
-    if (alphax <= alphay)
-        l = (alphax - alphac) * dconv;
-        disp(['Indicies (i): ', num2str(i),' ', num2str(j), ' ', num2str(l)]);
-
-        d12 = d12 + l;
-        i = i + iu;
-        alphac = alphax;
-        alphax = alphax + alphaxu;
-      elseif (alphax > alphay) 
-        l = (alphay - alphac) * dconv;
-        disp(['Indicies (j): ', num2str(i),' ', num2str(j), ' ', num2str(l)]);
-
-
-        d12 = d12 + l;
-        j = j + ju;
-        alphac = alphay;
-        alphay = alphay + alphayu;
-      elseif (alphax == alphay) 
-        disp(['Indicies (=): ', num2str(i), ' ' , num2str(j)]);
-        alphax = alphax + alphaxu; 
-    end
-end
-
+%disp(['Distance: ', num2str(d12)]);
 
 
 
