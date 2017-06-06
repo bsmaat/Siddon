@@ -175,6 +175,19 @@ alphatmp = (min(alphax, alphay) + alpha_min)/2;
 i = floor( (p1x + alphatmp * (p2x - p1x) - X0)/d );
 j = floor( (p1y + alphatmp * (p2y - p1y) - Y0)/d );
 
+tmp = [alphax alphay];
+af_min = min(tmp);
+tmp = sort(tmp);
+
+for m=1:size(tmp,2)
+  alpha_mean = (tmp(m) + alpha_min)  * 0.5;
+  i0 = floor( (p1x + alpha_mean * (p2x - p1x) - X0)/d );
+  j0 = floor( (p1y + alpha_mean * (p2y - p1y) - Y0)/d );
+  i0
+  j0
+end
+
+
 % temporary fix since the above won't get the right one if we're in teh
 % pixel space
 i = round( (p1x + alphax * (p2x - p1x) - X0)/d) - 1;
@@ -211,10 +224,11 @@ end
 
 Np = (i_max - i_min + 1) + (j_max - j_min + 1);
 
-Nv = 4; %# numer of pixels intersected
 %# dconv is from beginning to end
 dconv = sqrt( (p2x - p1x)^2 + (p2y - p1y)^2 );
 d12 = 0;
+
+%{
 if (i_min > 1 || j_min > 1) 
     alphac = 0;
 %else
@@ -240,13 +254,17 @@ if (i_min > 1 || j_min > 1)
         alphax = alphax + alphaxu; 
     end
 end
+%}
 
 %alphac = alphax;
 %alphax = alphax + alphaxu;
 
 % 1+1 because i've delt with the first plane already above (when it starts
 % insdie pixel)
-for k = 1+1:Np
+%for k = 1+1:Np
+alphac = 0;
+t = min([alphaxu, alphayu]);
+while (alphac + t < alpha_max)
   if (alphax <= alphay) 
     l = (alphax - alphac) * dconv;
     disp(['Indicies (i): ', num2str(i),' ', num2str(j), ' ', num2str(l)]);
@@ -270,6 +288,7 @@ for k = 1+1:Np
   end
 end
 
+%{
 if (i_max < Nx - 1 || j_max < Ny - 1) 
     alphax = 1;
     
@@ -296,7 +315,7 @@ if (i_max < Nx - 1 || j_max < Ny - 1)
         alphax = alphax + alphaxu; 
     end
 end
-
+%}
 
 
 
